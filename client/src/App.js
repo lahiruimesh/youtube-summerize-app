@@ -1,10 +1,15 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import LandingPage from './pages/landingPage';
 
 function App() {
   return (
     <div className="App">
-      <h1>Welcome to youtube summerize app</h1>
+      <Router>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+        </Routes>
+      </Router>
     </div>
   );
 }
