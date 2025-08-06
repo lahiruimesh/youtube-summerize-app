@@ -10,12 +10,14 @@ const LandingPage = () => {
   const [loading, setLoading] = useState(false);
   const summaryRef = useRef(); // Ref for the summary section
 
+  // Extract YouTube video ID from URL
   const extractVideoId = (url) => {
     const regex = /(?:youtube\.com\/(?:.*v=|.*\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
     const match = url.match(regex);
     return match ? match[1] : '';
   };
 
+  // Handle URL submit button click
   const handleUrlSubmit = () => {
     const extractedId = extractVideoId(youtubeUrl);
     if (extractedId) {
@@ -26,6 +28,7 @@ const LandingPage = () => {
     }
   };
 
+  // Fetch summary points from backend
   const fetchCaptions = async (id) => {
     setError('');
     setPoints([]);
@@ -42,6 +45,7 @@ const LandingPage = () => {
       const res = await fetch('http://localhost:5000/api/captions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include', // important if your backend uses cookies/sessions
         body: JSON.stringify({ videoId: targetId }),
       });
 
@@ -63,6 +67,7 @@ const LandingPage = () => {
     }
   };
 
+  // Download the summary as PDF
   const downloadPDF = async () => {
     const element = summaryRef.current;
     const canvas = await html2canvas(element);
