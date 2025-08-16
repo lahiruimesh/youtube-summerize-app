@@ -7,7 +7,7 @@ const { spawn } = require('child_process');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 const cors = require('cors');
 
-// Import your User & Summary mongoose models
+// Import User & Summary mongoose models
 const User = require('./models/user');        // your User model file path
 const Summary = require('./models/summary');  // your Summary model file path
 

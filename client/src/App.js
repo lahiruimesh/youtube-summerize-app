@@ -4,6 +4,7 @@ import LandingPage from './pages/landingPage';
 import Header from './components/header';
 import Homepage from './pages/homepage';
 import Dashboard from './pages/dashboard';
+import Footer from './components/footer';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Route path="/summerize" element={<LandingPage />} />
           <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
+        <Footer />
       </Router>
     </div>
   );
