@@ -157,5 +157,58 @@ app.get('/api/user/summaries', async (req, res) => {
   }
 });
 
+// DELETE /api/user/summaries/:id - delete a specific summary
+app.delete('/api/user/summaries/:id', async (req, res) => {
+  if (!req.user) return res.status(401).json({ error: 'Not authenticated' });
+
+  try {
+    const summary = await Summary.findById(req.params.id);
+    
+    if (!summary) {
+      return res.status(404).json({ error: 'Summary not found' });
+    }
+
+    // Check if the summary belongs to the authenticated user
+    if (summary.userId.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ error: 'Not authorized to delete this summary' });
+    }
+
+    await Summary.findByIdAndDelete(req.params.id);
+    res.json({ message: 'Summary deleted successfully' });
+  } catch (err) {
+    console.error('Error deleting summary:', err);
+    res.status(500).json({ error: 'Failed to delete summary' });
+  }
+});
+
+// GET /api/user/summaries/:id/download - download summary as PDF
+app.get('/api/user/summaries/:id/download', async (req, res) => {
+  if (!req.user) return res.status(401).json({ error: 'Not authenticated' });
+
+  try {
+    const summary = await Summary.findById(req.params.id);
+    
+    if (!summary) {
+      return res.status(404).json({ error: 'Summary not found' });
+    }
+
+    // Check if the summary belongs to the authenticated user
+    if (summary.userId.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ error: 'Not authorized to download this summary' });
+    }
+
+    // For now, return the summary data as JSON
+    // You can implement actual PDF generation here later
+    res.json({
+      videoId: summary.videoId,
+      summary: summary.summary,
+      createdAt: summary.createdAt
+    });
+  } catch (err) {
+    console.error('Error downloading summary:', err);
+    res.status(500).json({ error: 'Failed to download summary' });
+  }
+});
+
 // Start server
 app.listen(5000, () => console.log('✅ Server running on http://localhost:5000'));

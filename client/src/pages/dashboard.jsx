@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { HiOutlineDownload, HiOutlineExternalLink, HiOutlineClipboard, HiOutlineChevronDown, HiOutlineChevronUp, HiOutlineLogout } from 'react-icons/hi';
+import { HiOutlineDownload, HiOutlineExternalLink, HiOutlineClipboard, HiOutlineChevronDown, HiOutlineChevronUp, HiOutlineLogout, HiOutlineTrash } from 'react-icons/hi';
 import api from '../utils/api';
 
 const Dashboard = () => {
@@ -12,6 +12,7 @@ const Dashboard = () => {
   const [isLoadingSummaries, setIsLoadingSummaries] = useState(false);
   const [expandedById, setExpandedById] = useState({});
   const [error, setError] = useState('');
+  const [deletingId, setDeletingId] = useState(null);
 
   // Fetch user info when component mounts
   useEffect(() => {
@@ -72,6 +73,23 @@ const Dashboard = () => {
     }
   };
 
+  const handleDeleteSummary = async (summaryId) => {
+    if (!window.confirm('Are you sure you want to delete this summary? This action cannot be undone.')) {
+      return;
+    }
+
+    setDeletingId(summaryId);
+    try {
+      await api.delete(`/api/user/summaries/${summaryId}`);
+      setSummaries(prev => prev.filter(summary => summary._id !== summaryId));
+      setError('');
+    } catch (err) {
+      setError('Failed to delete summary. Please try again.');
+    } finally {
+      setDeletingId(null);
+    }
+  };
+
   const youtubeUrlFor = (videoId) => `https://www.youtube.com/watch?v=${videoId}`;
   const youtubeThumbFor = (videoId) => `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
 
@@ -108,19 +126,27 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-10 mt-24">
+    <div className="max-w-7xl mx-auto px-4 py-10 mt-28">
       {/* Top: User Card */}
-      <div className="bg-white border rounded-2xl p-6 shadow-sm flex items-center justify-between mb-8">
-        <div className="flex items-center gap-4">
-          <img src={user.photo} alt="Profile" className="w-14 h-14 rounded-full object-cover" />
+      <div className="bg-gradient-to-r from-white to-gray-50 border border-gray-200 rounded-2xl p-6 shadow-md hover:shadow-lg transition flex items-center h-36 justify-between mb-16">
+        {/* Left: Profile */}
+        <div className="flex items-center gap-4 ml-8">
           <div>
-            <h1 className="text-2xl font-bold">Hello, {user.name} 👋</h1>
-            <p className="text-gray-600">{user.email}</p>
+            <h1 className="text-2xl font-semibold text-gray-800">
+              Hello, <span className="text-red-600">{user.name}</span> 👋
+            </h1>
+            <p className="text-gray-500 text-sm">{user.email}</p>
           </div>
         </div>
-        <div className="flex items-center gap-3">
-          <button onClick={() => navigate('/summerize')} className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition">Summarize a video</button>
-          <button onClick={handleLogout} className="px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-50 transition flex items-center gap-2"><HiOutlineLogout /> Logout</button>
+
+        {/* Right: Actions */}
+        <div className="flex items-center gap-3 mr-8">
+          <button
+            onClick={() => navigate('/summerize')}
+            className="bg-gradient-to-r from-red-600 to-red-500 text-white px-5 py-2 rounded-xl shadow-md hover:shadow-lg hover:scale-105 transition-transform"
+          >
+            🎬 Summarize a Video
+          </button>
         </div>
       </div>
 
@@ -154,7 +180,7 @@ const Dashboard = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {summaries.map((item) => (
             <div key={item._id} className="border rounded-2xl overflow-hidden bg-white shadow-sm hover:shadow-md transition">
-              <div className="w-full h-40 bg-gray-100">
+              <div className="w-full h-100 bg-gray-100">
                 <img src={youtubeThumbFor(item.videoId)} alt="Video thumbnail" className="w-full h-full object-cover" />
               </div>
               <div className="p-4">
@@ -179,19 +205,41 @@ const Dashboard = () => {
                   </p>
                 )}
 
+              <div className="flex items-center justify-between w-full">
+                {/* Show More / Show Less (Left) */}
+                <button 
+                  onClick={() => toggleExpand(item._id)} 
+                  className="px-3 py-2 rounded-lg border border-gray-300 hover:bg-gray-50 transition flex items-center gap-2 text-sm"
+                >
+                  {expandedById[item._id] ? <HiOutlineChevronUp /> : <HiOutlineChevronDown />}
+                  {expandedById[item._id] ? 'Show less' : 'Show more'}
+                </button>
 
+                {/* Right-side Buttons */}
                 <div className="flex items-center gap-2">
-                  <button onClick={() => toggleExpand(item._id)} className="px-3 py-2 rounded-lg border border-gray-300 hover:bg-gray-50 transition flex items-center gap-2 text-sm">
-                    {expandedById[item._id] ? <HiOutlineChevronUp /> : <HiOutlineChevronDown />}
-                    {expandedById[item._id] ? 'Show less' : 'Show more'}
+                  <button 
+                    onClick={() => copySummary(item.summary || [])} 
+                    className="px-3 py-2 rounded-lg border border-gray-300 hover:bg-gray-50 transition flex items-center gap-2 text-sm"
+                  >
+                    <HiOutlineClipboard />
                   </button>
-                  <button onClick={() => copySummary(item.summary || [])} className="px-3 py-2 rounded-lg border border-gray-300 hover:bg-gray-50 transition flex items-center gap-2 text-sm">
-                    <HiOutlineClipboard /> Copy
+                  <button 
+                    onClick={() => handleDownloadPDF(item._id)} 
+                    className="px-3 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 transition flex items-center gap-2 text-sm"
+                  >
+                    <HiOutlineDownload />
                   </button>
-                  <button onClick={() => handleDownloadPDF(item._id)} className="ml-auto px-3 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 transition flex items-center gap-2 text-sm">
-                    <HiOutlineDownload /> PDF
+                  <button 
+                    onClick={() => handleDeleteSummary(item._id)}
+                    disabled={deletingId === item._id}
+                    className="px-3 py-2 rounded-lg border border-red-300 text-red-600 hover:bg-red-50 transition flex items-center gap-2 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <HiOutlineTrash />
+                    {deletingId === item._id ? 'Deleting...' : ''}
                   </button>
                 </div>
+              </div>
+
               </div>
             </div>
           ))}

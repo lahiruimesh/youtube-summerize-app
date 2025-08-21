@@ -42,47 +42,52 @@ const Header = () => {
   };
 
   return (
-    <header className="absolute top-0 left-0 w-full px-12 py-4 flex justify-between items-center bg-transparent z-10">
-      
-      {/* Left: Logo */}
-      <div className="flex items-center">
-        <a href="/">
-          <img src={logo} alt="App Logo" className="h-6 w-auto" />
-        </a>
-      </div>
-
-      {/* Center: Navigation */}
-      <nav className="hidden md:flex text-gray-900 font-bold gap-12">
-        <a href="#features" className="hover:text-blue-400 transition">Features</a>
-        <a href="#about" className="hover:text-blue-400 transition">About</a>
-        <a href="#pricing" className="hover:text-blue-400 transition">Pricing</a>
-        <a href="#contact" className="hover:text-blue-400 transition">Contact</a>
-      </nav>
-
-      {/* Right: Login/Profile */}
-      <div className="flex items-center gap-4">
-        {user ? (
-          <>
-            {/* Profile Icon */}
-            <button onClick={goToDashboard} className="text-3xl mr-4 text-gray-800 hover:text-blue-500 transition">
-              <FaUserCircle />
-            </button>
-
-            {/* Logout */}
-            <button
-              onClick={handleLogout}
-              className="bg-red-600 text-white hover:bg-red-800 transition px-4 py-2 rounded"
-            >
-              Logout
-            </button>
-          </>
-        ) : (
-          <a href="http://localhost:5000/auth/google">
-            <button className="bg-blue-600 text-white hover:bg-blue-800 transition px-4 py-2 rounded">
-              Sign in with Google
-            </button>
+    <header className="relative w-full px-6 md:px-12 py-4 bg-white/95 backdrop-blur-sm border-b border-gray-200 shadow-sm z-50">
+      <div className="max-w-7xl mx-auto flex justify-between items-center">
+        {/* Left: Logo */}
+        <div className="flex items-center">
+          <a href="/" className="flex items-center space-x-2">
+            <img src={logo} alt="App Logo" className="h-6 w-auto" />
           </a>
-        )}
+        </div>
+
+        {/* Center: Navigation */}
+        <nav className="hidden md:flex text-gray-700 font-medium gap-8">
+          <a href="#features" className="hover:text-red-600 transition-colors duration-200">Features</a>
+          <a href="#about" className="hover:text-red-600 transition-colors duration-200">About</a>
+          <a href="#guide" className="hover:text-red-600 transition-colors duration-200">Guide</a>
+          <a href="#contact" className="hover:text-red-600 transition-colors duration-200">Contact</a>
+        </nav>
+
+        {/* Right: Login/Profile */}
+        <div className="flex items-center gap-3">
+          {user ? (
+            <>
+              {/* Profile Icon */}
+              <button 
+                onClick={goToDashboard} 
+                className="text-2xl text-gray-700 hover:text-red-600 transition-colors duration-200 p-2 rounded-full hover:bg-gray-100"
+                title="Go to Dashboard"
+              >
+                <FaUserCircle />
+              </button>
+
+              {/* Logout */}
+              <button
+                onClick={handleLogout}
+                className="bg-red-600 text-white hover:bg-red-700 transition-colors duration-200 px-4 py-2 rounded-lg font-medium text-sm"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <a href="http://localhost:5000/auth/google">
+              <button className="bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 transition-all duration-200 px-5 py-2.5 rounded-lg font-medium text-sm shadow-md hover:shadow-lg">
+                Sign in with Google
+              </button>
+            </a>
+          )}
+        </div>
       </div>
     </header>
   );
