@@ -6,8 +6,12 @@ const Hero = () => {
 
     const navigate = useNavigate();
 
-    const handleClick = () => {
+    const handleClickSummerize = () => {
         navigate('/summerize');
+    };
+
+    const handleClickDashboard = () => {
+      navigate('/dashboard');
     };
 
   return (
@@ -28,10 +32,12 @@ const Hero = () => {
         <p className="text-lg md:text-xl text-gray-900 mb-6">Get AI-powered summaries of any YouTube video instantly. Save time,<br /> learn faster, and never miss the important points again.</p>
        
           <button
-          onClick={handleClick}
+          onClick={handleClickSummerize}
           className="w-40 bg-[#ff0000] hover:bg-blue-700 transition px-6 py-2 rounded text-white">
             Get Started
           </button>
+
+          
         
       </div>
     </section>
