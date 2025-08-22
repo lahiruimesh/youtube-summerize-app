@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import api from '../utils/api';
 
 const LandingPage = () => {
   const [videoId, setVideoId] = useState('');
@@ -42,23 +43,13 @@ const LandingPage = () => {
     setLoading(true);
 
     try {
-      const res = await fetch('http://localhost:5000/api/captions', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({ videoId: targetId }),
-      });
+      const res = await api.post('/api/captions', { videoId: targetId });
+      const data = res.data;
 
-      const data = await res.json();
-
-      if (res.ok) {
-        if (data.points && Array.isArray(data.points)) {
-          setPoints(data.points);
-        } else {
-          setError('No summary points received');
-        }
+      if (data.points && Array.isArray(data.points)) {
+        setPoints(data.points);
       } else {
-        setError(data.error || 'Failed to fetch summary');
+        setError('No summary points received');
       }
     } catch {
       setError('Failed to fetch summary. Please try again.');

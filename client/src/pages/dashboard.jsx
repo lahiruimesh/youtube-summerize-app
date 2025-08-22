@@ -63,7 +63,7 @@ const Dashboard = () => {
   };
 
   const handleDownloadPDF = (summaryId) => {
-    window.open(`${process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000'}/api/user/summaries/${summaryId}/download`, '_blank');
+    window.open(`http://localhost:5000/api/user/summaries/${summaryId}/download`, '_blank');
   };
 
   const copySummary = async (points) => {
@@ -119,7 +119,7 @@ const Dashboard = () => {
           <h1 className="text-3xl font-bold mb-3">Welcome back</h1>
           <p className="text-gray-600 mb-8">Sign in to view your saved video summaries and continue where you left off.</p>
           <div className="flex items-center justify-center gap-3">
-            <a href={`${process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000'}/auth/google`} className="bg-blue-600 text-white px-5 py-2.5 rounded-lg hover:bg-blue-700 transition">Sign in with Google</a>
+            <a href="http://localhost:5000/auth/google" className="bg-blue-600 text-white px-5 py-2.5 rounded-lg hover:bg-blue-700 transition">Sign in with Google</a>
             <button onClick={() => navigate('/')} className="px-5 py-2.5 rounded-lg border border-gray-300 hover:bg-gray-50 transition">Go Home</button>
           </div>
         </div>

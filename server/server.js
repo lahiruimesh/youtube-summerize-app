@@ -24,7 +24,7 @@ mongoose.connect(process.env.MONGO_URI)
 
 // Middleware
 app.use(cors({
-  origin: 'https://youtube-summerize-app.vercel.app',
+  origin: 'http://localhost:3000',
   credentials: true,
 }));
 app.use(express.json());
@@ -35,6 +35,11 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+
+// Health check endpoint
+app.get('/', (req, res) => {
+  res.json({ status: 'Server is running!', timestamp: new Date().toISOString() });
+});
 
 // Routes
 app.use('/auth', authRoutes);

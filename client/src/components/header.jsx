@@ -81,7 +81,7 @@ const Header = () => {
               </button>
             </>
           ) : (
-            <a href={`${process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000'}/auth/google`}>
+            <a href="http://localhost:5000/auth/google">
               <button className="bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 transition-all duration-200 px-5 py-2.5 rounded-lg font-medium text-sm shadow-md hover:shadow-lg">
                 Sign in with Google
               </button>
@@ -115,7 +115,7 @@ const Header = () => {
               </button>
             </div>
           ) : (
-            <a href={`${process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000'}/auth/google`}>
+            <a href="http://localhost:5000/auth/google">
               <button className="bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 transition-all px-4 py-2 rounded-lg w-full">
                 Sign in with Google
               </button>
