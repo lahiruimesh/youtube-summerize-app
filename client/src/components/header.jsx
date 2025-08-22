@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.png';
-import { FaUserCircle } from 'react-icons/fa';
+import { FaUserCircle, FaBars, FaTimes } from 'react-icons/fa';
 import axios from 'axios';
 
 const Header = () => {
   const [user, setUser] = useState(null); 
+  const [menuOpen, setMenuOpen] = useState(false); // For mobile menu
   const navigate = useNavigate();
 
-  // Check if user is logged in
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -16,66 +16,63 @@ const Header = () => {
           withCredentials: true,
         });
         setUser(res.data);
-      } catch (err) {
+      } catch {
         setUser(null);
       }
     };
-
     fetchUser();
   }, []);
 
-  // Handle logout
   const handleLogout = async () => {
     try {
       await axios.get('http://localhost:5000/auth/logout', {
         withCredentials: true,
       });
       setUser(null);
+      setMenuOpen(false);
     } catch (err) {
       console.error('Logout failed', err);
     }
   };
 
-  // Navigate to dashboard
   const goToDashboard = () => {
     navigate('/dashboard');
+    setMenuOpen(false);
   };
 
   return (
-    <header className="relative w-full px-6 md:px-12 py-4 bg-white/95 backdrop-blur-sm border-b border-gray-200 shadow-sm z-50">
+    <header className="fixed top-0 left-0 w-full px-6 md:px-12 py-4 bg-white/20 backdrop-blur-sm z-50 transition-all duration-300 shadow-sm">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
-        {/* Left: Logo */}
+        
+        {/* Logo */}
         <div className="flex items-center">
           <a href="/" className="flex items-center space-x-2">
-            <img src={logo} alt="App Logo" className="h-6 w-auto" />
+            <img src={logo} alt="App Logo" className="h-7 w-auto" />
           </a>
         </div>
 
-        {/* Center: Navigation */}
-        <nav className="hidden md:flex text-gray-700 font-medium gap-8">
-          <a href="#features" className="hover:text-red-600 transition-colors duration-200">Features</a>
-          <a href="#about" className="hover:text-red-600 transition-colors duration-200">About</a>
-          <a href="#guide" className="hover:text-red-600 transition-colors duration-200">Guide</a>
-          <a href="#contact" className="hover:text-red-600 transition-colors duration-200">Contact</a>
+        {/* Desktop Nav */}
+        <nav className="hidden md:flex text-black font-medium gap-8 drop-shadow-sm">
+          <a href="#features" className="hover:text-red-400 transition-colors duration-200">Features</a>
+          <a href="#about" className="hover:text-red-400 transition-colors duration-200">About</a>
+          <a href="#guide" className="hover:text-red-400 transition-colors duration-200">Guide</a>
+          <a href="#contact" className="hover:text-red-400 transition-colors duration-200">Contact</a>
         </nav>
 
-        {/* Right: Login/Profile */}
-        <div className="flex items-center gap-3">
+        {/* Desktop User/Login */}
+        <div className="hidden md:flex items-center gap-3">
           {user ? (
             <>
-              {/* Profile Icon */}
               <button 
                 onClick={goToDashboard} 
-                className="text-2xl text-gray-700 hover:text-red-600 transition-colors duration-200 p-2 rounded-full hover:bg-gray-100"
+                className="text-2xl text-black hover:text-red-400 transition-colors duration-200 p-2 rounded-full hover:bg-white/10"
                 title="Go to Dashboard"
               >
                 <FaUserCircle />
               </button>
-
-              {/* Logout */}
               <button
                 onClick={handleLogout}
-                className="bg-red-600 text-white hover:bg-red-700 transition-colors duration-200 px-4 py-2 rounded-lg font-medium text-sm"
+                className="bg-red-600 text-white hover:bg-red-700 transition-colors duration-200 px-4 py-2 rounded-lg font-medium text-sm shadow-md"
               >
                 Logout
               </button>
@@ -88,7 +85,41 @@ const Header = () => {
             </a>
           )}
         </div>
+
+        {/* Mobile Menu Toggle */}
+        <div className="md:hidden flex items-center">
+          <button onClick={() => setMenuOpen(!menuOpen)} className="text-2xl text-black p-2 rounded-md hover:bg-white/10 transition">
+            {menuOpen ? <FaTimes /> : <FaBars />}
+          </button>
+        </div>
       </div>
+
+      {/* Mobile Menu */}
+      {menuOpen && (
+        <div className="md:hidden mt-4 bg-white/95 backdrop-blur-sm shadow-lg rounded-xl py-4 px-6 absolute right-6 left-6 z-40 flex flex-col gap-3">
+          <a href="#features" onClick={() => setMenuOpen(false)} className="hover:text-red-400 font-medium">Features</a>
+          <a href="#about" onClick={() => setMenuOpen(false)} className="hover:text-red-400 font-medium">About</a>
+          <a href="#guide" onClick={() => setMenuOpen(false)} className="hover:text-red-400 font-medium">Guide</a>
+          <a href="#contact" onClick={() => setMenuOpen(false)} className="hover:text-red-400 font-medium">Contact</a>
+
+          {user ? (
+            <div className="flex flex-col gap-2 mt-2">
+              <button onClick={goToDashboard} className="flex items-center gap-2 px-4 py-2 text-black hover:text-red-400 rounded-lg hover:bg-white/10 transition">
+                <FaUserCircle /> Dashboard
+              </button>
+              <button onClick={handleLogout} className="bg-red-600 text-white hover:bg-red-700 px-4 py-2 rounded-lg transition">
+                Logout
+              </button>
+            </div>
+          ) : (
+            <a href="http://localhost:5000/auth/google">
+              <button className="bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 transition-all px-4 py-2 rounded-lg w-full">
+                Sign in with Google
+              </button>
+            </a>
+          )}
+        </div>
+      )}
     </header>
   );
 };

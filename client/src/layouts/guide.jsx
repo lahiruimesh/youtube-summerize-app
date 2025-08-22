@@ -44,7 +44,7 @@ const Guide = () => {
   const tips = [
     {
       icon: <HiOutlineUser size={24} className="text-orange-500" />,
-      text: 'Works with any public YouTube video - no account required'
+      text: 'Works with any public YouTube video'
     },
     {
       icon: <HiOutlineGlobe size={24} className="text-blue-500" />,

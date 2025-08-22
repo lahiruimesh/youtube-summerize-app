@@ -1,6 +1,6 @@
 import React from "react";
 import { HiOutlineMail, HiOutlineGlobe, HiOutlineHeart } from "react-icons/hi";
-import logo from '../assets/logo.png';
+import logo from '../assets/logo2.png';
 
 const Footer = () => {
   return (
@@ -76,14 +76,14 @@ const Footer = () => {
             <div className="mt-6">
               <h4 className="text-sm font-medium text-gray-400 mb-3">Follow Us</h4>
               <div className="flex space-x-3">
-                <a href="#" className="w-8 h-8 bg-gray-700 hover:bg-red-600 rounded-full flex items-center justify-center transition-colors duration-200">
-                  <span className="text-xs font-bold">T</span>
+                <a href="#" className="w-8 h-8 bg-gray-700 hover:bg-blue-600 rounded-full flex items-center justify-center transition-colors duration-200">
+                  <span className="text-xs font-bold">F</span>
                 </a>
-                <a href="#" className="w-8 h-8 bg-gray-700 hover:bg-red-600 rounded-full flex items-center justify-center transition-colors duration-200">
+                <a href="#" className="w-8 h-8 bg-gray-700 hover:bg-orange-600 rounded-full flex items-center justify-center transition-colors duration-200">
                   <span className="text-xs font-bold">G</span>
                 </a>
-                <a href="#" className="w-8 h-8 bg-gray-700 hover:bg-red-600 rounded-full flex items-center justify-center transition-colors duration-200">
-                  <span className="text-xs font-bold">L</span>
+                <a href="#" className="w-8 h-8 bg-gray-700 hover:bg-pink-600 rounded-full flex items-center justify-center transition-colors duration-200">
+                  <span className="text-xs font-bold">I</span>
                 </a>
               </div>
             </div>
@@ -98,17 +98,6 @@ const Footer = () => {
             <p className="text-sm text-gray-400 text-center md:text-left">
               © {new Date().getFullYear()} YTHub. All rights reserved.
             </p>
-            <div className="flex items-center space-x-6 mt-2 md:mt-0">
-              <a href="#" className="text-xs text-gray-400 hover:text-red-400 transition-colors duration-200">
-                Terms of Service
-              </a>
-              <a href="#" className="text-xs text-gray-400 hover:text-red-400 transition-colors duration-200">
-                Privacy Policy
-              </a>
-              <a href="#" className="text-xs text-gray-400 hover:text-red-400 transition-colors duration-200">
-                Cookie Policy
-              </a>
-            </div>
           </div>
         </div>
       </div>

@@ -10,9 +10,6 @@ const Hero = () => {
         navigate('/summerize');
     };
 
-    const handleClickDashboard = () => {
-      navigate('/dashboard');
-    };
 
   return (
     <section className="relative h-screen flex items-center overflow-hidden">
@@ -24,10 +21,10 @@ const Hero = () => {
       />
 
       {/* Overlay */}
-      <div className="absolute inset-0 z-10" />
+      <div className="absolute inset-0 z-8" />
 
       {/* Hero Content */}
-      <div className="relative z-20 max-w-3xl ml-12 px-4">
+      <div className="relative z-10 max-w-3xl ml-12 px-4 mt-4">
         <h1 className="text-4xl md:text-5xl text-back font-bold mb-4">Turn Hours of <span className='text-red-600'>YouTube</span> Videos into Minutes of Key Insights</h1>
         <p className="text-lg md:text-xl text-gray-900 mb-6">Get AI-powered summaries of any YouTube video instantly. Save time,<br /> learn faster, and never miss the important points again.</p>
        

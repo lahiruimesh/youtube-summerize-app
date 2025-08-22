@@ -210,5 +210,8 @@ app.get('/api/user/summaries/:id/download', async (req, res) => {
   }
 });
 
-// Start server
-app.listen(5000, () => console.log('✅ Server running on http://localhost:5000'));
+// Start server (bind to 0.0.0.0 and use PORT from environment)
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`✅ Server running on port ${PORT}`);
+});

@@ -1,5 +1,5 @@
 import React from 'react';
-import { HiShieldCheck, HiOutlineDownload, HiTranslate, HiDesktopComputer, HiOutlineClipboardList, HiOutlineClock } from 'react-icons/hi';
+import { HiShieldCheck, HiOutlineDownload, HiDesktopComputer, HiOutlineClipboardList, HiOutlineClock } from 'react-icons/hi';
 
 // Sample product data with icons
 const featuresList = [
@@ -23,18 +23,12 @@ const featuresList = [
   },
   {
     id: 4,
-    icon: <HiTranslate size={40} className="text-purple-500" />,
-    title: 'Translate',
-    description: 'Convert summaries to any language',
-  },
-  {
-    id: 5,
     icon: <HiDesktopComputer size={40} className="text-pink-500" />,
     title: 'Sync',
     description: 'Watch video with timestamped summary',
   },
   {
-    id: 6,
+    id: 5,
     icon: <HiShieldCheck size={40} className="text-orange-500" />,
     title: 'Free',
     description: 'All features completely free forever',
@@ -42,10 +36,11 @@ const featuresList = [
 ];
 
 const Features = () => {
+
   return (
     <section className="py-12 px-4 bg-gray-100 text-center">
       {/* Title and Subtitle */}
-      <h2 className="text-3xl font-bold mb-2">Features That Actually Matter</h2>
+      <h2 className="text-3xl font-bold mt-8 mb-2">Features That Actually Matter</h2>
       <p className="text-gray-600 mb-10">No fluff, no limits, no cost. Just the tools you need to get instant video insights.</p>
 
       {/* Product Cards */}

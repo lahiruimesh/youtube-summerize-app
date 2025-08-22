@@ -8,7 +8,7 @@ const LandingPage = () => {
   const [points, setPoints] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const summaryRef = useRef(); // Ref for the summary section
+  const summaryRef = useRef();
 
   // Extract YouTube video ID from URL
   const extractVideoId = (url) => {
@@ -17,7 +17,7 @@ const LandingPage = () => {
     return match ? match[1] : '';
   };
 
-  // Handle URL submit button click
+  // Handle URL submit
   const handleUrlSubmit = () => {
     const extractedId = extractVideoId(youtubeUrl);
     if (extractedId) {
@@ -28,7 +28,7 @@ const LandingPage = () => {
     }
   };
 
-  // Fetch summary points from backend
+  // Fetch summary
   const fetchCaptions = async (id) => {
     setError('');
     setPoints([]);
@@ -45,7 +45,7 @@ const LandingPage = () => {
       const res = await fetch('http://localhost:5000/api/captions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        credentials: 'include', // important if your backend uses cookies/sessions
+        credentials: 'include',
         body: JSON.stringify({ videoId: targetId }),
       });
 
@@ -67,7 +67,7 @@ const LandingPage = () => {
     }
   };
 
-  // Download the summary as PDF
+  // Download as PDF
   const downloadPDF = async () => {
     const element = summaryRef.current;
     const canvas = await html2canvas(element);
@@ -83,115 +83,68 @@ const LandingPage = () => {
   };
 
   return (
-    <div
-      style={{
-        maxWidth: 700,
-        margin: '3rem auto',
-        fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-        padding: '0 1rem',
-      }}
-    >
-      <h1 style={{ textAlign: 'center', marginBottom: '1.5rem', color: '#333' }}>
+    <div className="max-w-3xl mt-20 mx-auto px-4 py-12 font-sans">
+      {/* Title */}
+      <h1 className="text-3xl md:text-3xl font-bold text-center text-gray-800 mb-8">
         YouTube Video Summary
       </h1>
 
-      <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem' }}>
+      {/* Input Section */}
+      <div className="flex gap-3 mb-6">
         <input
           type="text"
           placeholder="Paste YouTube URL"
           value={youtubeUrl}
           onChange={(e) => setYoutubeUrl(e.target.value)}
-          style={{
-            padding: '0.75rem 1rem',
-            width: '100%',
-            border: '1px solid #ccc',
-            borderRadius: 4,
-            fontSize: '1rem',
-            outline: 'none',
-          }}
+          className="flex-1 px-4 py-3 border border-gray-300 rounded-lg text-gray-800 focus:ring-2 focus:ring-red-500 focus:outline-none"
         />
         <button
           onClick={handleUrlSubmit}
           disabled={loading}
-          style={{
-            padding: '0.75rem 1rem',
-            backgroundColor: loading ? '#6c757d' : '#007bff',
-            color: 'white',
-            border: 'none',
-            borderRadius: 4,
-            cursor: loading ? 'not-allowed' : 'pointer',
-            fontWeight: '600',
-          }}
+          className={`px-6 py-3 rounded-lg font-semibold text-white transition 
+            ${loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-red-600 hover:bg-red-700'}`}
         >
           {loading ? 'Loading...' : 'Summarize'}
         </button>
       </div>
 
+      {/* Video Preview */}
       {videoId && (
-        <div style={{ margin: '1.5rem 0', textAlign: 'center' }}>
+        <div className="mb-8 rounded-xl overflow-hidden shadow-md">
           <iframe
-            width="100%"
-            height="400"
+            className="w-full h-80 md:h-96"
             src={`https://www.youtube.com/embed/${videoId}`}
             title="YouTube Video"
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
-            style={{ borderRadius: '8px' }}
           />
         </div>
       )}
 
+      {/* Error Message */}
       {error && (
-        <p
-          role="alert"
-          style={{
-            color: '#dc3545',
-            textAlign: 'center',
-            marginTop: '1rem',
-            fontWeight: '600',
-            backgroundColor: '#f8d7da',
-            padding: '0.75rem 1rem',
-            borderRadius: 4,
-          }}
-        >
+        <div className="bg-red-100 text-red-700 font-medium px-4 py-3 rounded-lg text-center mb-6">
           {error}
-        </p>
+        </div>
       )}
 
+      {/* Summary Section */}
       {points.length > 0 && (
         <section
           ref={summaryRef}
-          aria-label="Summary Points"
-          style={{
-            marginTop: '2rem',
-            backgroundColor: 'white',
-            padding: '1.5rem',
-            borderRadius: 6,
-            boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
-          }}
+          className="bg-white shadow-md rounded-xl p-6"
         >
-          <h2 style={{ marginBottom: '1rem', color: '#222' }}>Summary</h2>
-          <ul style={{ listStyleType: 'disc', paddingLeft: '1.5rem', lineHeight: 1.6 }}>
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">Summary</h2>
+          <ul className="list-disc pl-6 space-y-2 text-gray-700 leading-relaxed">
             {points.map((point, idx) => (
-              <li key={idx} style={{ marginBottom: '0.75rem', fontSize: '1rem', color: '#444' }}>
-                {point}
-              </li>
+              <li key={idx}>{point}</li>
             ))}
           </ul>
 
           <button
             onClick={downloadPDF}
-            style={{
-              marginTop: '1.5rem',
-              padding: '0.75rem 1.5rem',
-              backgroundColor: '#28a745',
-              color: 'white',
-              border: 'none',
-              borderRadius: 4,
-              fontWeight: '600',
-              cursor: 'pointer',
-            }}
+            className="mt-6 px-5 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg shadow-md transition flex items-center gap-2"
           >
             📥 Download PDF
           </button>
