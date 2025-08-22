@@ -24,7 +24,7 @@ mongoose.connect(process.env.MONGO_URI)
 
 // Middleware
 app.use(cors({
-  origin: 'http://http://youtube-summerize-app.vercel.app',
+  origin: 'https://youtube-summerize-app.vercel.app',
   credentials: true,
 }));
 app.use(express.json());
