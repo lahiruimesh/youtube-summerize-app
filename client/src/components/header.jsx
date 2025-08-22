@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.png';
 import { FaUserCircle, FaBars, FaTimes } from 'react-icons/fa';
-import axios from 'axios';
+import api from '../utils/api';
 
 const Header = () => {
   const [user, setUser] = useState(null); 
@@ -12,24 +12,27 @@ const Header = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/auth/user', {
-          withCredentials: true,
-        });
+        const res = await api.get('/auth/user');
         setUser(res.data);
       } catch {
         setUser(null);
       }
     };
+    
     fetchUser();
+    
+    // Check authentication status every 30 seconds
+    const interval = setInterval(fetchUser, 30000);
+    
+    return () => clearInterval(interval);
   }, []);
 
   const handleLogout = async () => {
     try {
-      await axios.get('http://localhost:5000/auth/logout', {
-        withCredentials: true,
-      });
+      await api.get('/auth/logout');
       setUser(null);
       setMenuOpen(false);
+      navigate('/');
     } catch (err) {
       console.error('Logout failed', err);
     }
@@ -78,7 +81,7 @@ const Header = () => {
               </button>
             </>
           ) : (
-            <a href="http://localhost:5000/auth/google">
+            <a href={`${process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000'}/auth/google`}>
               <button className="bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 transition-all duration-200 px-5 py-2.5 rounded-lg font-medium text-sm shadow-md hover:shadow-lg">
                 Sign in with Google
               </button>
@@ -112,7 +115,7 @@ const Header = () => {
               </button>
             </div>
           ) : (
-            <a href="http://localhost:5000/auth/google">
+            <a href={`${process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000'}/auth/google`}>
               <button className="bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 transition-all px-4 py-2 rounded-lg w-full">
                 Sign in with Google
               </button>
